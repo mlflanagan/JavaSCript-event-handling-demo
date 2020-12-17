@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html lang='en-US'>
+<head>
+<meta charset="utf-8">
+<title>Test</title>
+</head>
+<body>
+<div id="wrapper">
+    <a id="google" href="http://www.google.com">Google</a>
+</div>
+</body>
+<script type = "text/javascript">
+/*global window, console, document */
+(function () {
+    'use strict';
+
+    function divClickHandler(e) {
+        // parent element event handler
+        console.debug("div click handler");
+        
+        // suppress opening the link
+        // e.preventDefault();
+        
+        // stop propagation down when useCapture is true but does *not*
+        // prevent browser's default behavior
+        // e.stopPropagation();
+    }
+
+    function linkClickHandler(e) {
+        // child element event handler
+        console.debug("link click handler");
+        
+        // suppress opening the link but still bubble up to parent
+        // e.preventDefault();
+        
+        // stop propagation up when useCapture is false but does *not*
+        // prevent browser's default behavior
+        // e.stopPropagation();
+
+        // prevent *any* handlers from executing (not just parent)
+        // e.stopImmediatePropagation();
+        
+        // prevent event from bubbling up to parent (IE < 9 only)
+        // e.cancelBubble = true;
+        
+        // calls event.preventDefault() but does NOT call event.stopPropagation()
+        // Example code: e.preventDefault ? e.preventDefault() : e.returnValue = false;
+        e.returnValue = false;
+    }
+
+    /* addEventListener parameters are: event, function, and useCapture.
+       useCapture defaults to false, meaning the bubble phase rather than the
+       capture phase. Setting it to true uses the capture phase instead of
+       the bubble phase. By setting divClickHandler useCapture to true, the
+       div handler (parent element) is invoked in the capture phase, before
+       the link handler (child element). Otherwise the link handler will be
+       invoked first.
+       - Bubble phase (default): order is link --> div
+       - Target phase: link
+       - Capture phase: order is div --> link
+    */
+    document.getElementById("wrapper").addEventListener('click', divClickHandler, false);
+    document.getElementById("google").addEventListener('click', linkClickHandler, false);
+}());
+</script>
+</html>
